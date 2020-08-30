@@ -1,0 +1,278 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace OuderBijdrage1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            ComboBoxFill();
+        }
+
+        double basisbedrag = 50;
+        double bedrag;
+        double bonusbedrag1 = 25;
+        double bonusbedrag2 = 37;
+        double maxbedrag = 150;
+        double totaalbedrag;
+        int intcurrentyear;
+        string stringcurrentyear;
+        string currentday;
+        string currentmonth;
+        int lastlistyear;
+        int date1;
+        int date2;
+        int date3;
+        int date4;
+        int date5;
+        int date6;
+        bool kind110 = false;
+        bool kind210 = false;
+        bool kind310 = false;
+        bool kind410 = false;
+        bool kind510 = false;
+
+        bool kind113 = false;
+        bool kind213 = false;
+        bool kind313 = false;
+        bool kind413 = false;
+        bool kind513 = false;
+
+        int count13 = 0;
+        int count10 = 0;
+
+        private void RadioButtonGroup1()
+        {
+
+        }
+
+        private void ComboBoxFill()
+        {
+            for (int i = 1; i < 32; i++)
+            {
+                comboBox1.Items.Add(string.Format("{0:00}", i));
+                comboBox4.Items.Add(string.Format("{0:00}", i));
+                comboBox5.Items.Add(string.Format("{0:00}", i));
+                comboBox12.Items.Add(string.Format("{0:00}", i));
+                comboBox15.Items.Add(string.Format("{0:00}", i));
+            }
+
+            for (int i = 1; i < 13; i++)
+            {
+                comboBox2.Items.Add(string.Format("{0:00}", i));
+                comboBox7.Items.Add(string.Format("{0:00}", i));
+                comboBox9.Items.Add(string.Format("{0:00}", i));
+                comboBox11.Items.Add(string.Format("{0:00}", i));
+                comboBox14.Items.Add(string.Format("{0:00}", i));
+            }
+
+            DateTime today = DateTime.Today;
+
+            stringcurrentyear = today.ToString("yyyy");
+            intcurrentyear = Convert.ToInt32(stringcurrentyear);
+
+            lastlistyear = intcurrentyear - 18;
+            
+
+            for (int i = intcurrentyear; i > lastlistyear; i--)
+            {
+                comboBox3.Items.Add(i);
+                comboBox6.Items.Add(i);
+                comboBox8.Items.Add(i);
+                comboBox10.Items.Add(i);
+                comboBox13.Items.Add(i);
+            }
+        }
+
+        private void DateCalc()
+        {
+            DateTime today = DateTime.Today;
+            stringcurrentyear = today.ToString("yyyy");
+            currentday = today.ToString("dd");
+            currentmonth = today.ToString("MM");
+
+            try
+            {
+                date1 = int.Parse(comboBox3.Text.ToString() + comboBox2.Text.ToString() + comboBox1.Text.ToString());
+                date2 = int.Parse(comboBox6.Text.ToString() + comboBox7.Text.ToString() + comboBox4.Text.ToString());
+                date3 = int.Parse(comboBox8.Text.ToString() + comboBox9.Text.ToString() + comboBox5.Text.ToString());
+                date4 = int.Parse(comboBox10.Text.ToString() + comboBox11.Text.ToString() + comboBox12.Text.ToString());
+                date5 = int.Parse(comboBox13.Text.ToString() + comboBox14.Text.ToString() + comboBox15.Text.ToString());
+            }
+            catch { }
+
+            date6 = int.Parse(stringcurrentyear + currentmonth + currentday);
+
+            
+
+
+        }
+
+        private void PriceCalc1()
+        {
+            if (date1 > 0 && date1 > (date6 - 100000))
+            {
+                kind110 = true;
+                ++count10;
+            }
+            else if(date1 > 0)
+            {
+                kind113 = true;
+                ++count13;
+            }
+            if (date2 > 0 && date2 > (date6 - 100000))
+            {
+                kind210 = true;
+                ++count10;
+            }
+            else if (date2 > 0)
+            {
+                kind213 = true;
+                ++count13;
+            }
+            if (date3 > 0 && date3 > (date6 - 100000))
+            {
+                kind310 = true;
+                ++count10;
+            }
+            else if (date3 > 0)
+            {
+                kind313 = true;
+                ++count13;
+            }
+            if (date4 > 0 && date4 > (date6 - 100000))
+            {
+                kind410 = true;
+                ++count10;
+            }
+            else if (date4 > 0)
+            {
+                kind413 = true;
+                ++count13;
+            }
+            if (date5 > 0 && date5 > (date6 - 100000))
+            {
+                kind510 = true;
+                ++count10;
+            }
+            else if (date5 > 0)
+            {
+                kind513 = true;
+                ++count13;
+            }
+        }
+
+        private void PriceCalc2()
+        {
+            if (count10 >= 3)
+            {
+                bedrag = bedrag + (bonusbedrag1 * 3);
+            }
+            if (count13 >= 2)
+            {
+                bedrag = bedrag + (bonusbedrag2 * 2);
+            }
+
+            if (count10 == 2)
+            {
+                bedrag = bedrag + (bonusbedrag1 * 2);
+            }
+
+            if (count10 == 1)
+            {
+                bedrag = bedrag + (bonusbedrag1 * 1);
+            }
+            if (count13 == 1)
+            {
+                bedrag = bedrag + (bonusbedrag2 * 1);
+            }
+
+            totaalbedrag = basisbedrag + bedrag;
+            
+
+            
+        }
+
+        private void PriceCalc3()
+        {
+            if (radioButton1.Checked == false && radioButton2.Checked == false)
+            {
+                MessageBox.Show("graag de verplichte velden invullen");
+                label4.ForeColor = Color.Red;
+                label5.ForeColor = Color.Red;
+            }
+
+            if (radioButton2.Checked == true && totaalbedrag > 150)
+            {
+                totaalbedrag = 150;
+                textBox1.Text = totaalbedrag.ToString();
+            }
+
+            if (radioButton1.Checked == true && totaalbedrag > 150)
+            {
+                totaalbedrag = 150;
+                totaalbedrag = totaalbedrag * 0.75;
+                textBox1.Text = totaalbedrag.ToString();
+            }
+
+            else if(radioButton2.Checked == true)
+            {
+                textBox1.Text = totaalbedrag.ToString();
+            }
+
+            else if (radioButton1.Checked == true)
+            {
+                textBox1.Text = totaalbedrag.ToString();
+            }
+
+        }
+
+        private void CheckDate()
+        {
+            DateTime today = DateTime.Today;
+            textBox1.Text = today.ToString("dd/MM/yyyy");
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            basisbedrag = 50;
+            totaalbedrag = 0;
+            bedrag = 0;
+            kind110 = false;
+            kind210 = false;
+            kind310 = false;
+            kind410 = false;
+            kind510 = false;
+
+            kind113 = false;
+            kind213 = false;
+            kind313 = false;
+            kind413 = false;
+            kind513 = false;
+            count10 = 0;
+            count13 = 0;
+            label4.ForeColor = Color.Black;
+            label5.ForeColor = Color.Black;
+            DateCalc();
+            PriceCalc1();
+            PriceCalc2();
+            PriceCalc3();
+        }
+    }
+
+    
+}
